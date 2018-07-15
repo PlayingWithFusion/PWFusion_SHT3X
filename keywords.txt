@@ -5,16 +5,16 @@
 ####################################################
 #   Classes (KEYWORD1)
 ####################################################
-PWFusion_SHT3X							KEYWORD1
+PWFusion_SHT3X	KEYWORD1
 
 ####################################################
 #   Functions (KEYWORD2)
 ####################################################
-begin									KEYWORD2
-sht3x_heat_en							KEYWORD2
-SHT3X_update							KEYWORD2
-write_cmd								KEYWORD2
-write_cmd								KEYWORD2
+begin	KEYWORD2
+sht3x_heat_en	KEYWORD2
+SHT3X_update	KEYWORD2
+write_cmd	KEYWORD2
+write_cmd	KEYWORD2
 
 ####################################################
 #   Constants (LITERAL1)
