@@ -1,46 +1,11 @@
-/***************************************************************************
- * File Name: SEN-37002_SHT31D_HumTemp.ino
- * Processor/Platform: Arduino Uno R3 (tested)
- * Development Environment: Arduino 1.6.5
- *
- * Designed for use with with Playing With Fusion SHT31-DIS-B and SHT31-DIS-F
- * Humidity and Temperature Sensor Breakouts: SEN-37002
- *
- *   SEN-37002 (universal applications)
- *   ---> http://www.playingwithfusion.com/productview.php?pdid=81 B, no filter
- *   ---> F, with filter
- *   Note: This will aslo work with other SHT3X sensors (SHT35, for instance)
- *
- * Copyright © 2017 Playing With Fusion, Inc.
- * SOFTWARE LICENSE AGREEMENT: This code is released under the MIT License.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- * **************************************************************************
- * REVISION HISTORY:
- * Author    Date    Comments
- * J. Steinlage  2017Feb   Original version
- *
- * Playing With Fusion, Inc. invests time and resources developing open-source
- * code. Please support Playing With Fusion and continued open-source
- * development by buying products from Playing With Fusion!
- *
- * **************************************************************************/
+/**
+ * @file PWFusion_SHT3X.cpp
+ * 
+ * @brief See header for more details
+ * 
+ * @copyright Copyright (c) 2025 Playing With Fusion
+ * 
+ */
 #include "PWFusion_SHT3X.h"
 
 PWFusion_SHT3X::PWFusion_SHT3X(TwoWire *pWire) { _pWire = pWire; }
@@ -52,10 +17,8 @@ bool PWFusion_SHT3X::begin(uint8_t address) {
   }
 
   _devAddr = address;
-  _tempRaw = 0;
-  _humidRaw = 0;
   _pWire->begin();
-  sht3x_reset();
+  reset();
 
   return true;
 }
@@ -73,7 +36,7 @@ void PWFusion_SHT3X::disableHeater() { writeCmd(SHT3X_HEATER_DIS); }
 
 // Update temperature and humidity readings from sensor
 PWFusion_SHT3X_Data PWFusion_SHT3X::measure() {
-  PWFusion_SHT3X_Data data;
+  PWFusion_SHT3X_Data data = PWFusion_SHT3X_Data(0.0, 0.0, false);
 
   // send single shot update command to sensor, then wait for sensor to complete
   // the measurement
@@ -148,7 +111,6 @@ PWFusion_SHT3X_Data::PWFusion_SHT3X_Data(uint16_t rawTemp, uint16_t rawHumidity,
 float PWFusion_SHT3X_Data::getTempC() {
   // See SHT3X-DIS datasheet, section 4.13
   return -45.0f + ((175.0f * rawTemp) / 65535.0f);
-  return
 }
 
 float PWFusion_SHT3X_Data::getTempF() {
